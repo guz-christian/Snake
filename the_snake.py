@@ -2,13 +2,15 @@ import pygame
 
 class Snake():
     def __init__(self,starting_loc,color):
-        self.body = [starting_loc]
-        self.tail = []
-
-        self.direction = "none"
-
         self.square_size = 20
-        self.color = color
+        self.body_color = color
+
+        self.offset = (10,10)
+        
+        self.direction = "none"
+        self.alive = True
+
+        self.body = [starting_loc]
 
     def move(self):
         head = self.body[0]
@@ -16,15 +18,16 @@ class Snake():
             self.body.pop()
         if self.direction == "right":
             self.body.insert(0,[head[0] + self.square_size, head[1]])
-
         if self.direction == "left":
-            self.body.insert(0,[head[0] - self.square_size, head[1]])
-        
+            self.body.insert(0,[head[0] - self.square_size, head[1]])       
         if self.direction == "down":
             self.body.insert(0,[head[0], head[1] + self.square_size])
-
         if self.direction == "up":
             self.body.insert(0,[head[0], head[1] - self.square_size])
+
+    def grow(self):
+        tail = self.body[-1]
+        self.body.append(tail)
 
     def crashed(self, num_cols,num_rows,enemy_squares):
         head = self.body[0]
@@ -48,4 +51,4 @@ class Snake():
     def draw(self,screen):
         for cell in self.body:
             rect = pygame.Rect(cell[0],cell[1],self.square_size,self.square_size)
-            pygame.draw.rect(screen,self.color, rect)
+            pygame.draw.rect(screen,self.body_color, rect)
